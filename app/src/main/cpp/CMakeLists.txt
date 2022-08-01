@@ -21,7 +21,44 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp)
+        native-lib.cpp
+
+        base/HHVEGLUtils.cpp
+        base/HHVEFrameBase.cpp
+        base/HHVELogUtils.cpp
+        base/HHVESafeQueue.cpp
+        base/HHVELooper.cpp
+
+        audio/HHVEAudioTrack.cpp
+        audio/HHVEOpenSL.cpp
+
+        codec/HHVEDecoder.cpp
+        codec/HHVEEncoder.cpp
+
+        )
+
+include_directories(${CMAKE_SOURCE_DIR})
+
+# FFMPEG
+set(FFMPEG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thirdParty/include)
+set(FFMPEG_LIB_DIR ${CMAKE_SOURCE_DIR}/thirdParty/bin)
+
+include_directories(${FFMPEG_INCLUDE_DIR})
+
+add_library(avcodec SHARED IMPORTED)
+set_target_properties(avcodec PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libavcodec.so)
+add_library(avdevice SHARED IMPORTED)
+set_target_properties(avdevice PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libavdevice.so)
+add_library(avfilter SHARED IMPORTED)
+set_target_properties(avfilter PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libavfilter.so)
+add_library(avformat SHARED IMPORTED)
+set_target_properties(avformat PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libavformat.so)
+add_library(avutil SHARED IMPORTED)
+set_target_properties(avutil PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libavutil.so)
+add_library(swresample SHARED IMPORTED)
+set_target_properties(swresample PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libswresample.so)
+add_library(swscale SHARED IMPORTED)
+set_target_properties(swscale PROPERTIES IMPORTED_LOCATION ${FFMPEG_LIB_DIR}/libswscale.so)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -42,6 +79,7 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
         hhavdemo
+        android OpenSLES
 
         # Links the target library to the log library
         # included in the NDK.
